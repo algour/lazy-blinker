@@ -30,56 +30,56 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 LSS += \
-blink.lss \
+lazy-blinker.lss \
 
 FLASH_IMAGE += \
-blink.hex \
+lazy-blinker.hex \
 
 EEPROM_IMAGE += \
-blink.eep \
+lazy-blinker.eep \
 
 SIZEDUMMY += \
 sizedummy \
 
 
 # All Target
-all: blink.elf secondary-outputs
+all: lazy-blinker.elf secondary-outputs
 
 # Tool invocations
-blink.elf: $(OBJS) $(USER_OBJS)
+lazy-blinker.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: AVR C Linker'
-	avr-gcc -Wl,-Map,blink.map -mmcu=attiny13 -o "blink.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	avr-gcc -Wl,-Map,lazy-blinker.map -mmcu=attiny13 -o "lazy-blinker.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-blink.lss: blink.elf
+lazy-blinker.lss: lazy-blinker.elf
 	@echo 'Invoking: AVR Create Extended Listing'
-	-avr-objdump -h -S blink.elf  >"blink.lss"
+	-avr-objdump -h -S lazy-blinker.elf  >"lazy-blinker.lss"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-blink.hex: blink.elf
+lazy-blinker.hex: lazy-blinker.elf
 	@echo 'Create Flash image (ihex format)'
-	-avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex blink.elf  "blink.hex"
+	-avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex lazy-blinker.elf  "lazy-blinker.hex"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-blink.eep: blink.elf
+lazy-blinker.eep: lazy-blinker.elf
 	@echo 'Create eeprom image (ihex format)'
-	-avr-objcopy -j .eeprom --no-change-warnings --change-section-lma .eeprom=0 -O ihex blink.elf  "blink.eep"
+	-avr-objcopy -j .eeprom --no-change-warnings --change-section-lma .eeprom=0 -O ihex lazy-blinker.elf  "lazy-blinker.eep"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-sizedummy: blink.elf
+sizedummy: lazy-blinker.elf
 	@echo 'Invoking: Print Size'
-	-avr-size --format=avr --mcu=attiny13 blink.elf
+	-avr-size --format=avr --mcu=attiny13 lazy-blinker.elf
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(FLASH_IMAGE)$(ELFS)$(OBJS)$(ASM_DEPS)$(EEPROM_IMAGE)$(S_DEPS)$(SIZEDUMMY)$(S_UPPER_DEPS)$(LSS)$(C_DEPS) blink.elf
+	-$(RM) $(FLASH_IMAGE)$(ELFS)$(OBJS)$(ASM_DEPS)$(EEPROM_IMAGE)$(S_DEPS)$(SIZEDUMMY)$(S_UPPER_DEPS)$(LSS)$(C_DEPS) lazy-blinker.elf
 	-@echo ' '
 
 secondary-outputs: $(LSS) $(FLASH_IMAGE) $(EEPROM_IMAGE) $(SIZEDUMMY)
